@@ -1,0 +1,82 @@
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: "compass"
+apply plugin: 'war'
+apply plugin: 'application'
+
+version = 'build'
+sourceCompatibility = 1.8
+mainClassName = "teste.TesteApplication"
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven { url 'http://dl.bintray.com/robfletcher/gradle-plugins' }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.gradle.plugins:gradle-compass:1.0.7")
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+configurations.all { resolutionStrategy.force 'rubygems:rb-inotify:0.9.5' }
+
+compass {
+	cssDir = file("src/main/resources/static/css")
+	sassDir = file("src/main/resources/static/sass")
+}
+
+ext {
+	springCloudVersion = 'Dalston.SR2'
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-activemq')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+	compile('org.springframework.boot:spring-boot-starter-mail')
+	compile('eu.michael-simons:wro4j-spring-boot-starter:0.3.5')
+	compile('org.thymeleaf.extras:thymeleaf-extras-springsecurity4')
+	compile('org.thymeleaf.extras:thymeleaf-extras-conditionalcomments')
+	compile('org.apache.commons:commons-lang3:3.6')
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.9.0')
+	compile('org.javers:javers-core:3.5.0')
+	compile('org.apache.tika:tika-core:1.16')
+	compile('net.sourceforge.nekohtml:nekohtml:1.9.22')
+	compile('org.springframework.boot:spring-boot-devtools')
+	runtime('org.postgresql:postgresql')
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+	compile("org.flywaydb:flyway-core:4.2.0")
+	compile('org.webjars:bootbox:4.4.0')
+	compile('org.webjars:bootstrap-switch:3.3.2')
+	compile group: 'com.rollbar', name: 'rollbar', version: '0.5.4'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.277'
+	compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
